@@ -55,7 +55,7 @@ class Parse {
               .map((m) => _parseDeclaration(context, m))
               .toList(),
           declaration.isAbstract,
-          declaration.extendsClause?.superclass.name.name,
+          declaration.extendsClause?.superclass2.name.name,
           parseContext: context);
     } else if (declaration is VariableDeclarationList) {
       return _parseVariableDecList(
@@ -236,7 +236,7 @@ class Parse {
       return EvalInstanceCreationExpresion(
           expression.offset,
           expression.length,
-          _parseIdentifier(expression.constructorName.type.name),
+          _parseIdentifier(expression.constructorName.type2.name),
           expression.constructorName.name?.name ?? '');
     } else if (expression is NamedExpression) {
       return EvalNamedExpression(

@@ -31,43 +31,100 @@ void main() {
   // Parse the code we want to run. The scope variable now holds
   // all top-level declared classes and functions, ready to run
   final scope = parser.parse('''
-    class MyWorldTimeTracker extends WorldTimeTracker {
-    
-      MyWorldTimeTracker();
-      
-      final countries = <String, TimestampedTime> {
-        'USA': _currentTimeWithOffset(4),
-        'UK': _currentTimeWithOffset(6),
-      };
-      
-      static TimestampedTime _currentTimeWithOffset(int offset) {
-        return TimestampedTime(DateTime.now().millisecondsSinceEpoch,
-          timezoneOffset: offset);
-      }
-            
-      @override
-      TimestampedTime getTimeFor(String country) {
-        return countries[country];
-      }
-    }
-    
-    MyWorldTimeTracker fn(String country) {
-      final timeTracker = MyWorldTimeTracker();
-      final myTime = timeTracker.getTimeFor(country);
-      
-      print(country + ' timezone offset: ' + myTime.timezoneOffset.toString() + ' (from Eval!)');
-      
-      return timeTracker;
-    }
-    ''');
+dynamic main() {
+  var someNumber = 19;
 
-  // The returned scope is a callable class, so it's easy to call your method
-  final timeTracker =
-      scope('fn', [Parameter(EvalString('USA'))]) as WorldTimeTracker;
+  var a = A(45);
+  for (var i = someNumber; i < 200; i = i + 1) {
+    final n = a.calculate(i);
+    if (n > someNumber) {
+      a = B(555);
+    } else {
+      if (a.number > B(a.number).calculate(2)) {
+        a = C(888 + a.number);
+      }
+      someNumber = someNumber + 1;
+    }
 
-  print('UK timezone offset: ' +
-      timeTracker.getTimeFor('UK').timezoneOffset.toString() +
-      ' (from outside Eval!)');
+    if (n > a.calculate(a.number - i)) {
+      a = D(21 + n);
+      someNumber = someNumber - 1;
+    }
+  }
+
+  return a.number;
+}
+
+class A {
+  final int number;
+
+  A(this.number);
+
+  int calculate(int other) {
+    return number + other;
+  }
+}
+
+class B extends A {
+  B(this.number);
+  
+  final int number;
+
+  @override
+  int calculate(int other) {
+    var d = 1334;
+    for (var i = 0; i < 15 + number; i = i + 1) {
+      if (d > 4000) {
+        d = d - 14;
+      }
+      d = d + i;
+    }
+    return d;
+  }
+}
+
+class C extends A {
+  C(this.number);
+  
+  final int number;
+
+  @override
+  int calculate(int other) {
+    var d = 1556;
+    for (var i = 0; i < 24 - number; i = i + 1) {
+      if (d > 4000) {
+        d = d - 14;
+      } else if (d < 299) {
+        d = d + 5 + 5;
+      }
+      d = d + i;
+    }
+    return d;
+  }
+}
+
+class D extends A {
+  D(this.number);
+  
+  final int number;
+
+  @override
+  int calculate(int other) {
+    var d = 1334;
+    for (var i = 0; i < 15 + number; i = i + 1) {
+      if (d > 4000) {
+        d = d - 14;
+      }
+      d = d + number;
+    }
+    return d;
+  }
+}    ''');
+
+
+  final dt = DateTime.now().millisecondsSinceEpoch;
+  print(scope('main', []));
+  print(DateTime.now().millisecondsSinceEpoch - dt);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
